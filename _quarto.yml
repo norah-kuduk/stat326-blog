@@ -7,10 +7,8 @@ website:
   navbar:
     right:
       - about.qmd
+
 format:
   html:
     theme: lux
     css: styles.css
-
-
-

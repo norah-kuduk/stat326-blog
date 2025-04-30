@@ -257,18 +257,18 @@ window.Quarto = {
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>many_ci_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5,000 × 3
-    phat       lb    ub
-   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
- 1   0.5  0.240   0.760
- 2   0.4  0.145   0.655
- 3   0.4  0.145   0.655
- 4   0.3  0.0616  0.538
- 5   0.6  0.345   0.855
- 6   0.2 -0.00806 0.408
- 7   0.3  0.0616  0.538
- 8   0.8  0.592   1.01 
- 9   0.5  0.240   0.760
-10   0.5  0.240   0.760
+    phat     lb    ub
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1   0.5 0.240  0.760
+ 2   0.6 0.345  0.855
+ 3   0.5 0.240  0.760
+ 4   0.4 0.145  0.655
+ 5   0.5 0.240  0.760
+ 6   0.3 0.0616 0.538
+ 7   0.6 0.345  0.855
+ 8   0.3 0.0616 0.538
+ 9   0.4 0.145  0.655
+10   0.5 0.240  0.760
 # ℹ 4,990 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>many_ci_df <span class="ot">&lt;-</span> many_ci_df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">ci_width =</span> ub <span class="sc">-</span> lb,</span>
@@ -278,18 +278,18 @@ window.Quarto = {
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>many_ci_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5,000 × 5
-    phat       lb    ub ci_width ci_cover_ind
-   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
- 1   0.5  0.240   0.760    0.520            1
- 2   0.4  0.145   0.655    0.510            1
- 3   0.4  0.145   0.655    0.510            1
- 4   0.3  0.0616  0.538    0.477            1
- 5   0.6  0.345   0.855    0.510            1
- 6   0.2 -0.00806 0.408    0.416            0
- 7   0.3  0.0616  0.538    0.477            1
- 8   0.8  0.592   1.01     0.416            0
- 9   0.5  0.240   0.760    0.520            1
-10   0.5  0.240   0.760    0.520            1
+    phat     lb    ub ci_width ci_cover_ind
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
+ 1   0.5 0.240  0.760    0.520            1
+ 2   0.6 0.345  0.855    0.510            1
+ 3   0.5 0.240  0.760    0.520            1
+ 4   0.4 0.145  0.655    0.510            1
+ 5   0.5 0.240  0.760    0.520            1
+ 6   0.3 0.0616 0.538    0.477            1
+ 7   0.6 0.345  0.855    0.510            1
+ 8   0.3 0.0616 0.538    0.477            1
+ 9   0.4 0.145  0.655    0.510            1
+10   0.5 0.240  0.760    0.520            1
 # ℹ 4,990 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>many_ci_df <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">avg_width =</span> <span class="fu">mean</span>(ci_width),</span>
@@ -298,7 +298,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1     0.486         0.798</code></pre>
+1     0.487         0.798</code></pre>
 </div>
 </div>
 </section>
@@ -330,7 +330,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1     0.229         0.885</code></pre>
+1     0.228         0.879</code></pre>
 </div>
 </div>
 </section>
@@ -361,7 +361,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1    0.0516         0.896</code></pre>
+1    0.0516         0.900</code></pre>
 </div>
 </div>
 </section>
@@ -392,7 +392,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1     0.356         0.846</code></pre>
+1     0.358         0.851</code></pre>
 </div>
 </div>
 </section>
@@ -423,7 +423,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1     0.180         0.890</code></pre>
+1     0.180         0.900</code></pre>
 </div>
 </div>
 </section>
@@ -455,7 +455,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1    0.0408         0.901</code></pre>
+1    0.0408         0.895</code></pre>
 </div>
 </div>
 </section>
