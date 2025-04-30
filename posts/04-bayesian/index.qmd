@@ -1,0 +1,178 @@
+---
+title: "Bayesian Analysis"
+date: "04-02-2025"
+format: html
+categories:
+  - mini-project
+---
+# Mini Project 4: Bayesian Analysis
+
+Rafael Nadal is arguably the greatest men’s clay-court tennis player ever to play the game. In this mini-project, you analyze the probability that Nadal wins a point on his own serve against his primary rival, Novak Djokovic, at the French Open (the most prestigious clay court tournament in the world).
+
+
+### Statement of Integrity
+
+“I have followed all rules for collaboration for this project, and I have not used generative AI on this project.”
+*Norah Kuduk*
+
+```{r}
+#| warnings: false
+#| output: false
+library(tidyverse)
+library(knitr)
+```
+
+## Introduction
+
+In this mini-project we will be researching and analyzing the probability that Nadal wins a point on his own serve against Djokovic on a clay court. To do this, we will use Bayesian models on binomial data (points won). During this project, we will use three different priors, one non-informative, and two informative, one based on a previous match competed by the two players, and one based on a sports commentator's interpretation of Nadal's stats. 
+
+After creating the three priors, we will update them with the data from Nadal and Djokovic's 2020 French Open match, where Nadal served 84 points and won 56 of those points. Using the posterior distributions, we can caluclate the posterior mean and credible intervals for each $p$. 
+
+## Priors 
+
+### Non-informative Prior
+For the non-informative prior, we assume that we have no prior information about the possible values of $p$. We can use a distribution of Beta(1,1), which is the same as Unif(0,1), to represent equal likelihood of any probability between 0 and 1. 
+
+```{r}
+noninformative_alpha_prior <- 1
+noninformative_beta_prior <- 1
+```
+
+### Informative Prior (Based on Clay Match)
+An informative prior based on a clay-court match the two played in the previous year. In that match, Nadal won 46 out of 66 points on his own serve. The standard error of this estimate is 0.05657.
+
+To create this informative prior, we can use the fact that in the previous match Nadal won 46 out of 66 points on his serve against Djokovic. Using this information, we can generate a sequence of alphas and use the fact that in a beta distribution $\mu = \frac{\alpha}{\alpha + \beta}$ to get a sequence of possible betas. Using those settings, we can calculate the variance of each setting. Whichever setting has the closest variance to $0.05657^2$ is the setting for $\alpha_{prior}$ and $\beta_{prior}$. 
+
+```{r}
+target_mean <- 46 / 66
+
+alphas <- seq(0.01, 100, length.out = 500)
+betas <- (alphas * (1 - target_mean)) / target_mean
+
+param_df <- tibble(alphas, betas)
+param_df <- param_df |> mutate(vars =
+                                 (alphas * betas) / ((alphas + betas)^2 * (alphas + betas + 1)))
+
+target_var <- 0.05657^2
+
+param_df <- param_df |> mutate(dist_to_target = abs(vars - target_var))
+
+param_df |> filter(dist_to_target == min(dist_to_target))
+```
+
+```{r}
+claycourt_alpha_prior <- 45.3
+claycourt_beta_prior <- 19.7
+```
+
+### Informative Prior (Based on Announcer)
+Create an informative prior based on a sports announcer, who claims that they think Nadal wins about 75% of the points on his serve against Djokovic. They are also “almost sure” that Nadal wins no less than 70% of his points on serve against Djokovic.
+
+To create this informative prior, we can use the fact that the announcer thinks that wins about 75% of the points on his serve against Djokovic. Using this information, we can generate a sequence of alphas and use the fact that in a beta distribution $\mu = \frac{\alpha}{\alpha + \beta}$ to get a sequence of possible betas. Then because the announcer is "almost sure" Nadal wins no less than 70% of his points on serve, we want $P(p < 0.7)$ to be a small value, like 0.02.  Then we can go through each alpha and beta setting to find the one that has a probability closest to 0.02. That setting will give us our $\alpha_{prior}$ and $\beta_{prior}$. 
+
+```{r}
+alphas <- seq(0.1, 300, length.out = 1000) 
+
+target_mean <- 0.75
+target_prob <- 0.02 # almost sure
+
+betas <- (alphas * (1 - target_mean)) / target_mean
+
+prob_below_70 <- pbeta(0.70, alphas, betas) 
+
+tibble(alphas, betas, prob_below_70) |>
+  mutate(close_to_target = abs(prob_below_70 - target_prob)) |>
+  filter(close_to_target == min(close_to_target))
+```
+
+```{r}
+announcer_alpha_prior <- 252.1  
+announcer_beta_prior <- 83.9 
+```
+
+### Prior Distributions
+
+```{r}
+lambda_grid <- seq(0, 1, length.out = 1000)
+
+noninformative_prior <- dbeta(lambda_grid, noninformative_alpha_prior, noninformative_beta_prior)
+claycourt_prior <- dbeta(lambda_grid, claycourt_alpha_prior, claycourt_beta_prior)
+announcer_prior <- dbeta(lambda_grid, announcer_alpha_prior, announcer_beta_prior)
+```
+
+```{r}
+plot_df <- tibble(lambda_grid, noninformative_prior, claycourt_prior, announcer_prior) |>
+  pivot_longer(cols = -lambda_grid, names_to = "distribution", values_to = "density") |>
+  separate(distribution, into = c("prior_type", "distribution"), sep = "_")
+
+ggplot(data = plot_df, aes(x = lambda_grid, y = density, color = prior_type)) +
+  geom_line() +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() +
+  labs(title = "Prior Distributions")
+```
+
+## Posteriors
+
+```{r}
+x <- 56 # points won by Nadal
+n <- 84 # total points
+
+# Compute posterior parameters
+noninformative_alpha_post <- noninformative_alpha_prior + x
+noninformative_beta_post <- noninformative_beta_prior + (n - x)
+
+claycourt_alpha_post <- claycourt_alpha_prior + x
+claycourt_beta_post <- claycourt_beta_prior + (n - x)
+
+announcer_alpha_post <- announcer_alpha_prior + x
+announcer_beta_post <- announcer_beta_prior + (n - x)
+
+# Compute posterior distributions
+noninformative_posterior <- dbeta(lambda_grid, noninformative_alpha_post, noninformative_beta_post)
+claycourt_posterior <- dbeta(lambda_grid, claycourt_alpha_post, claycourt_beta_post)
+announcer_posterior <- dbeta(lambda_grid, announcer_alpha_post, announcer_beta_post)
+```
+
+### Posterior Distributions
+
+```{r}
+plot_df <- tibble(lambda_grid, noninformative_posterior, claycourt_posterior, announcer_posterior) |>
+  pivot_longer(cols = -lambda_grid, names_to = "distribution", values_to = "density") |>
+  separate(distribution, into = c("prior_type", "distribution"), sep = "_")
+
+ggplot(data = plot_df, aes(x = lambda_grid, y = density, color = prior_type)) +
+  geom_line() +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() + 
+  labs(title = "Posterior Distributions")
+```
+
+### Postierior Means and Credible Intervals
+
+```{r}
+posterior_params <- tibble(
+  model = c("Non-Informative", "Clay Court", "Announcer"),
+  a_prior = c(noninformative_alpha_prior, claycourt_alpha_prior, announcer_alpha_prior),
+  b_prior = c(noninformative_beta_prior, claycourt_beta_prior, announcer_beta_prior),
+  a_post = c(noninformative_alpha_post, claycourt_alpha_post, announcer_alpha_post),
+  b_post = c(noninformative_beta_post, claycourt_beta_post, announcer_beta_post),
+) |>
+  mutate(
+    posterior_mean = a_post / (a_post + b_post),
+    credible_lower = qbeta(0.05, a_post, b_post),
+    credible_upper = qbeta(0.95, a_post, b_post)
+)
+kable(posterior_params)
+```
+
+#### Comparison
+
+In this case, we would likely use the posterior model created from the previous clay court prior, as it balances prior knowledge with observed data. The non-informative prior treats all $p$ values as equally likely, an was heavilily influneced by the observed data. If Nadal is believed to be be the best clay court player, this likely underestimates the $p$ that he wins a point against Djokovic off serve. In addition, the credible interval for the clay court is much narrower than the non-informative model, indicating we are more confident in our estimate. The announcer model has the lowest variance because it's $\alpha_{prior}$ and $\beta_{prior}$ were the significantly larger than the three, meaning that adding the observed data had the least impact, and only served to make the posterior more confident. The downside to this is depending on the credibility of the announcer, his initial belief in Nadal could easily overestimate $p$, meaning that the observed data still doesn't have as much of an effect.  
+
+## Conclusion
+
+This mini-project allowed us to experiment with Bayesian models and observe how differing priors can affect the posterior distributions of the data. Priors with large parameters (like the model based of the announcer's stats) can dominate the results, possibly overlooking the actual affect of the observed data. A non-informative prior relies heavily on the obsserved data, but also can be less confident, resulting in high variance. This is balanced with a model like the model based on a previous match, where the $\alpha_{prior}$ and $\beta_{prior}$ provided some information, but was also responsive to new data. 
+
+
+

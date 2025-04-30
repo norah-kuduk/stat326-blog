@@ -1,0 +1,242 @@
+---
+title: "Confidence Intervals"
+date: "03-05-2025"
+format: html
+categories:
+  - mini-project
+---
+# Mini Project 3: Simulation to Investigate Confidence Intervals
+
+The confidence intervals we have discussed in class each have associated assumptions in order for us to use them correctly. But, what exactly happens if one of the assumptions is violated? Why is a violated assumption ‘bad’ anyway? In this mini-project, you will investigate what happens to interval width and coverage rate if an assumption is violated for the asymptotic confidence interval for a population proportion.
+
+
+The following project will explore generating confidence intervals of a true proportion over 6 different settings. Having a small, medium, and large $n$, as well as having a true proportion close to 0.5 and far from 0.5.
+
+## Loading Packages and Function Def
+
+```{r}
+#| output: false
+library(tidyverse)
+```
+
+```{r}
+generate_onesamp_cis <- function(n, p, alpha) {
+  
+  ## generate a single sample (one of nsim data sets)
+  x <- rbinom(1, n, p)
+  
+  phat <- x / n
+
+  lb <- phat - qnorm(1 - alpha/2) * sqrt((phat * (1 - phat))/n)
+  ub <- phat + qnorm(1 - alpha/2) * sqrt((phat * (1 - phat))/n)
+  
+  ## put everything into a tibble
+  out_df <- tibble(phat, lb, ub)
+  
+  return(out_df)
+}
+
+# test the function once with random data
+generate_onesamp_cis(n = 25, p = 0.5, alpha = 0.1)
+```
+
+## Setting 1: Small n, Proportion close to 0.5
+
+```{r}
+## define parameters to use in our function
+n <- 10  # sample size
+p <- 0.44    # true proportion
+alpha <- 0.1  # used to construct 90% CI
+```
+
+$np \gt 10 \rightarrow (10)(0.44) \gt 10 \rightarrow 4.4 \not\gt 10$
+
+$n(1-p) \gt \rightarrow (50)(0.56) \gt 10 \rightarrow 5.6 \not\gt 10$
+
+In this case, the large sample assumption does not hold. 
+
+```{r}
+nsim <- 5000  # the number of simulated CIs to create
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+many_ci_df
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+many_ci_df
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Setting 2: Medium n, Proportion close to 0.5
+
+```{r}
+n <- 50  
+p <- 0.44    
+```
+
+$np \gt 10 \rightarrow (50)(0.44) \gt 10 \rightarrow 22 \gt 10$
+
+$n(1-p) \gt \rightarrow (50)(0.56) \gt 10 \rightarrow 28 \gt 10$
+
+In this case, the large sample assumption holds. 
+
+```{r}
+nsim <- 5000
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Setting 3: Large n, Proportion close to 0.5
+
+```{r}
+n <- 1000 
+p <- 0.44    
+```
+
+$np \gt 10 \rightarrow (1000)(0.44) \gt 10 \rightarrow 440 \gt 10$
+
+$n(1-p) \gt \rightarrow (1000)(0.56) \gt 10 \rightarrow 560 \gt 10$
+
+In this case, the large sample assumption holds. 
+
+```{r}
+nsim <- 5000  # the number of simulated CIs to create
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Setting 4: Small n, Proportion far from 0.5
+
+```{r}
+n <- 10 
+p <- 0.81   
+```
+
+$np \gt 10 \rightarrow (10)(0.81) \gt 10 \rightarrow 8.1 \not\gt 10$
+
+$n(1-p) \gt \rightarrow (10)(0.19) \gt 10 \rightarrow 1.9 \not\gt 10$
+
+In this case, the large sample assumption does not hold.  
+
+```{r}
+nsim <- 5000 
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Setting 5: Medium n, Proportion far from 0.5
+
+```{r}
+n <- 50
+p <- 0.81
+```
+
+$np \gt 10 \rightarrow (50)(0.81) \gt 10 \rightarrow 40.5 \gt 10$
+
+$n(1-p) \gt \rightarrow (50)(0.19) \gt 10 \rightarrow 9.5 \not\gt 10$
+
+In this case, the large sample assumption does not hold. 
+
+```{r}
+nsim <- 5000  # the number of simulated CIs to create
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Setting 6: Large n, Proportion far from 0.5
+
+```{r}
+n <- 1000
+p <- 0.81
+
+```
+
+$np \gt 10 \rightarrow (1000)(0.81) \gt 10 \rightarrow 810 \gt 10$
+
+$n(1-p) \gt \rightarrow (1000)(0.19) \gt 10 \rightarrow 190 \gt 10$
+
+In this case, the large sample assumption holds. 
+
+```{r}
+nsim <- 5000  # the number of simulated CIs to create
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, p = p,
+                                            alpha = alpha)) |>
+  bind_rows()
+
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(p > lb & p < ub,
+                                                          true = 1, 
+                                                          false = 0))
+
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+## Table of Results
+
+|  |         | $n = 10$ | $n = 50$ | $n = 1000$ |
+|:----:|:-----------------:|:-------------:|:------------:|:------------:|
+| $p = 0.44$   | Coverage Rate       | 0.799  | 0.888  | 0.893  |
+| $p = 0.81$   | Coverage Rate       | 0.840  | 0.893  | 0.903  |
+|    |                     |               |              |              |
+| $p = 0.44$    | Average Width        | 0.488  | 0.229  | 0.0516  |
+| $p = 0.81$    | Average Width        | 0.353  | 0.179  | 0.0408  |
+
+: Table of Results {.striped .hover}
+
+## Summary
+
+From class, we saw that the “large sample assumption” only holds when $np \gt 10$ and $n(1-p) \gt 10$. We can see from the work here that for both cases were $n$ is small ($n = 10$) neither proportion value ($p = 0.44, 0.81$) meets the condition. This indicates that the intervals produced might not be valid. For the medium $n$ values, $n = 50$, the assumption holds when $p = 0.44$, but fails when $p = 0.81$. For large $n$, $n = 1000$, the assumption is met for both values of $p$, meaning that our intervals are likely valid to estimate confidence intervals. 
+
+The coverage rates for the $n = 1000$ settings are very close to the ideal 90% level, 0.893 and 0.903, for the $p = 0.44$ and $p = 0.81$ settings respectively. This indicates that the use of the normal approximation for the z-score works well in this case. This is consistent with our findings that the “large sample assumption” holds true for large n. For smaller sample sizes ($n = 10$), the coverage rates are significantly lower for both $p$ settings, which holds with out findings about the "large sample assumption." Because the assumption was not satisfied, it makes sense that the coverage rate is much lower than the normal approximation would've made. For the medium $n$ settings, $p = 0.44$ satisfied the "large sample assumption", while $p = 0.81$, though the $p = 0.81$ setting still produced a coverage rate closer to 0.9. I would assume that while the setting didn't satisfy the assumption, $n(1-p) = 9.5$, which might be close enough to 10 that using the normal approximation will still work relatively well. 
+
+We can see that average width decreases as the sample size increases. For $p = 0.44$, the width drops from 0.488 ($n = 10$) to 0.0516 ($n = 1000$). Similarly, for $p = 0.81$, the width decreases from 0.353 ($n = 10$) to 0.0408 ($n = 1000$). This makes sense, as increasing the n value will decrease the value of standard error when calculating the value of the upper and lower bounds because the denominator in $\sqrt{\frac{\hat{p}(1 - \hat{p}}{n}}$. This will decrease the overall average with of the confidence intervals. 

@@ -1,0 +1,15 @@
+---
+title: "Course Reflection"
+date: "04-28-2025"
+format: html
+categories:
+  - reflection
+---
+
+**Reflect on your overall experience in this class by describing an interesting idea that you learned, why it was interesting to you, and what it tells you about practicing statistics.**
+
+**Which assessment (homework assignment, recap task, mini-project, or in-class assessment) do you feel you learned the most from? Explain what you learned from this assessment and/or why the assessment was valuable to you.**
+
+**What was a concept you learned in this course that you hope you remember 5 years from now? Why is it important that you remember this concept?**
+
+**What statistical ideas are you curious to know more about as a result of taking this class? Try to give two examples and explain why you would like to know more about them.**

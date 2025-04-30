@@ -1,0 +1,21 @@
+---
+title: "Estimation"
+date: "02-18-2025"
+categories:
+  - mini-project
+---
+# Mini-Project 2: Estimation
+
+For this mini-project, you will write a “meaningful story.” A “meaningful story” is one continuous piece of writing / creative work that uses key words from a list and in which the sentences “make sense and hang together.” That is, the ideas in the story must illustrate that you understand key concepts from Stat 326 in a way that allows you to write “meaningfully” about them. 
+
+## The Relay Conundrum
+
+The St. Lawrence University swim team is travelling to their Liberty League championships next week, but their coach is still trying to figure out how to organize the final relay. Normally, the 400 yard free relay has the top 4 fastest swimmers in the event compete in the A relay, the next 4 in the B, and so on. This year, the 4th and 5th place swimmers have 100 yard free times within one-tenth of each other, and almost identical relay splits as well. The coach has to figure out who is going to go in which relay. Instead of randomly picking one or the other, the coach hears that statistics might be able to help them make a fair decision for both swimmers. Ideally, the swimmer best fit for the relay would go just over 54 seconds, which meant that the coach needed to figure out who was most likely to go that time using results from the rest of the season. 
+	
+The average time of a swimmer’s 100 yard freestyle over the course of a season is a parameter, which is an unknown value that can hopefully give an idea of the swimmer’s performance. Because the coach was out of time, and championships was this week, they needed to use an estimator, a function of sample data that could provide an approximation of average time. Using data from all the 100 freestyles the swimmers competed in over the course of the season, they took a random sample of 5 races and calculated both swimmer’s average split time. This sample statistic served as an estimate of the true parameter.
+	
+The time of each 100 is a random variable, which means that the coach knows that there will be some variation across times, as no one can go the same time over and over and over again. The coach assumed that each swimmer’s 100 times followed a Normal distribution where times exist around an average value with some variation in them. 
+	
+Before creating an estimator and finding an estimate, the coach has to consider possible bias. In an ideal world, the swimmers could swim at their best and their fastest, every single time they swam. This obviously isn’t accurate, so only taking the meets where one swimmer was rested before the race, and the other was sick, would overestimate and underestimate the times respectively. To reduce the bias in the sample, the coach made sure times were picked randomly to get a better overall view. The coach also knows that there can be variance across samples, so they checked whether increasing the sample size to more than 5 races would reduce variability. In addition, when picking the estimator the coach needs to ensure that is consistent, so that as sample size would increase, the estimate would converge to the true value of the population. 
+	
+Using this, the coach analyzed the likelihood of each swimmer going the ideal time by considering samples of their times throughout the season. Each time, the coach calculated the probability that the average time was below 54 seconds. Even with statistical methods, the competition was close, and both swimmers had a high likelihood of being successful. Still the coach put swimmer 1 into the A relay, and swimmer 2 into the B, with the explanation of “it’s what the math says.” In their respective relays, both swimmers swim great, though swimmer 1 goes slightly faster, and the coach breathes a small sigh of relief that the numbers didn’t fail her this time. There’s always next time though… 

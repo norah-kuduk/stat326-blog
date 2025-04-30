@@ -1,0 +1,47 @@
+---
+title: "Hypothesis Testing"
+date: "04-18-2025"
+format: html
+categories:
+  - mini-project
+---
+
+# Mini Project 5: Advantages and Drawbacks of Using p-values
+
+Read the editorial *Moving to a World Beyond ‘p < 0.05’* by Wasserstein, Schirm, and Lazar published in The American Statistician in 2019 as the introduction to a special issue about p-values. Answer a series of questions about it. 
+
+**Statement of Integrity:** “All work presented is my own, and I have followed all rules for collaboration. I have not used generative AI on this project.”
+
+*Norah Kuduk*
+
+### Questions:
+
+**Towards the end of Section 1, the authors say “As ‘statistical significance’ is used less, statistical thinking will be used more.” Elaborate on what you think the authors mean. Give some examples of what you think embodies “statistical thinking.”**
+
+I think the authors mean that as a whole, the perspective on evaluating results needs to move away from threshold based thinking, and towards a more open approach. Statistical thinking highlights the idea that researchers will be able to communicate all of their findings, including those that might not be "accepted" under current standards today. It will validate results being "uncertain," and focus on effective communication of the entirety of the analysis, and not just a single number that may or may not have value. 
+
+**Section 2, third paragraph: The authors state “A label of statistical significance adds nothing to what is already conveyed by the value of p; in fact, this dichotomization of p-values makes matters worse.” Elaborate on what you think the authors means.**
+
+The authors mean that innately, the definition of a p-value has nothing to do with statistical significance, and using some threshold to define whether something is statistically significant doesn't make sense. The dichotomization of a p-value causes there to be a definite difference between results where there might not actually be much difference at all. For example, a p-value of 0.049 would be considered statistically significant, while a p-value of 0.051 is statistically insignificant. 
+
+**Section 2, end of first column: The authors state “For the integrity of scientific publishing and research dissemination, therefore, whether a p-value passes any arbitrary threshold should not be considered at all when deciding which results to present or highlight.” Do you agree or disagree? How should it be decided which results to present/highlight in scientific publishing?**
+
+I agree that whether or not a specific a p-value passes any arbitrary threshold should not be considered when deciding what results to publish or not. It goes into the idea of exploratory vs. pre-planned studies, but it is also true that a result that is not statistically significant is just important to others than one that is. It is a core part of a intro stat course that a p-value can only give amounts of evidence to support a hypothesis, not give any proof about the association or effect of a variable, so it makes sense that one value or another shouldn't be used to decide on presenting or withholding information accordingly. 
+
+**Section 3, end of page 2: The authors state “The statistical community has not yet converged on a simple paradigm for the use of statistical inference in scientific research – and in fact it may never do so. A one-size-fits-all approach to statistical inference is an inappropriate expectation.” Do you agree or disagree? Explain.**
+
+I agree, "statistics" involves such a broad range of studies and techniques, that it honestly makes sense that there is not one single method that works for ever single statistical analysis. I do agree that for entry-level statistics, it makes sense to have something like the p-value threshold to introduce the ideas of interpreting results in a way that is more formulaic, but I think that it can be made more clear that while this is appropriate for intro level classes, as a whole the statistics community is moving away from the idea. 
+
+**Section 3.2: The authors note that they are envisioning “a sort of ‘statistical thoughtfulness’.” What do you think “statistical thoughtfulness” means? What are some ways to demonstrate “statistical thoughtfulness” in an analysis?**
+
+"Statistical thoughtfulness" indicates a reflective approach to an analysis, and being open to the idea that a result may or may not have a clear importance to the study. Ways to be statistically thoughtful in an analysis involve defining the objectives of the research and clarifying what researchers want to see from the analysis. It also involves using multiple techniques or approaches to test practicality rather than relying on metrics. It also involves recognizing when in an analysis there were limitations to the techniques or when more subjective choices were made. 
+
+**Section 3.2.4: A few of the authors of papers in this special issue argue that some of the terminology used in statistics, such as “significance” and “confidence” can be misleading, and they propose the use of “compatibility” instead. What you do you think they believe the problem is? Do you agree or disagree (that there is a problem and that changing the name will help)?**
+
+The author's believe that terms “significance” and “confidence” are misleading, which forces users into overconfident claims about their data. I agree that significance and confidence are easily misinterpreted, especially when learning statistical techniques for the first time. It reminds me of recently when we went over the difference between the frequentist and Bayesian methods, highlighting how in the frequentist interpretation, 95% confidence is often misinterpreted as 95% probability. Changing the name might help relieve some of that confusion.
+
+**Find a quote or point that really strikes you (i.e., made you think). What is the quote (and tell me where to find it), and why does it stand out to you?**
+
+Section 5, second paragraph: "Why is eliminating the use of p-values as a truth arbiter so hard? 'The basic explanation is neither philosophical nor scientific, but sociologic; everyone uses them,' says Goodman (2019). 'It’s the same reason we can use money. When everyone believes in something’s value, we can use it for real things; money for food, and p-values for knowledge claims, publication, funding, and promotion. It doesn’t matter if the p-value doesn’t mean what people think it means; it becomes valuable because of what it buys.'" 
+
+I found this quote striking because it is essentially calling the idea of a p-value a social construct, something that doesn't actually exist, but is so widely used that no one can stand to get rid of it. I think the comparison to currency is really interesting, that the idea of a p-value is only as important as people make it, the same way that specific pieces of printed paper are also valuable because we believe it so. It highlights how at this point, it doesn't matter how many people provide good, even great alternatives to the p-value, if they aren't widely accepted by the statistical community, they have no value. Something needs to be just as convenient, and just as prominent as a p-value to ever take its place, which is incredibly difficult based on the current state of statistical practice. 
