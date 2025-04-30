@@ -68,6 +68,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -141,6 +170,7 @@ ul.task-list li input[type="checkbox"] {
 <p>how each mini-project ties in to other content in the course.</p>
 <p>how each mini-project ties in with some other mini-projects (note that some mini-projects are more connected than others: you do not need to “connect” every single mini-project with every other mini-project).</p>
 <p>your biggest take-aways from these mini-projects (these should not be copy-pasted from the “take-away” section of any of your original mini-projects: the expectation is that, now that we have gone through the entire course, your take-aways may be more sophisticated now).</p>
+<p>The first mini-project we did involved simulations of the sampling distributions of the sample minimum (<span class="math inline">\(Y_{min}\)</span>) and the sample maximum (<span class="math inline">\(Y_{max}\)</span> when taking samples from different populations (specified below). This connected to the overall goal of section 1, where our goals involved constructing the sampling distribution of any sample statistic (sample mean, sample median, sample maximum, etc.) given a population model for the simulation, explaining how a change in sample size affects the center and spread of a sampling distribution, and matching properties of the simulated sampling distribution of the sample mean to the theoretical sampling distribution of the sample mean that we did in probability. The second</p>
 
 
 

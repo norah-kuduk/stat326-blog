@@ -1,12 +1,12 @@
 ---
 title: "Course Reflection"
 date: "04-28-2025"
-format: html
 categories:
   - reflection
 ---
 
 **Reflect on your overall experience in this class by describing an interesting idea that you learned, why it was interesting to you, and what it tells you about practicing statistics.**
+
 
 **Which assessment (homework assignment, recap task, mini-project, or in-class assessment) do you feel you learned the most from? Explain what you learned from this assessment and/or why the assessment was valuable to you.**
 

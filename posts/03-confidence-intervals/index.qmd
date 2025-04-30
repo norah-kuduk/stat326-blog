@@ -1,7 +1,6 @@
 ---
 title: "Confidence Intervals"
 date: "03-05-2025"
-format: html
 categories:
   - mini-project
 ---

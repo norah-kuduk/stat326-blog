@@ -1,7 +1,6 @@
 ---
 title: "Bayesian Analysis"
 date: "04-02-2025"
-format: html
 categories:
   - mini-project
 ---

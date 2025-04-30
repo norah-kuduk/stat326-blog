@@ -1,7 +1,6 @@
 ---
 title: "Sampling Distribution"
 date: "01-29-2025"
-format: html
 categories:
   - mini-project
 ---
